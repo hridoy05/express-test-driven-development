@@ -1,0 +1,51 @@
+{
+  "name": "express-ws",
+  "version": "1.0.0",
+  "description": "tdd with express",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon index",
+    "test": "jest --watch",
+    "lint": "eslint ."
+  },
+  "author": "hridoy",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.18.1",
+    "sequelize": "^6.21.4",
+    "sqlite3": "^5.0.11"
+  },
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "jest": "^28.1.3",
+    "jest-watch-typeahead": "^2.0.0",
+    "nodemon": "^2.0.19",
+    "supertest": "^6.2.4"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "eqeqeq": "warn",
+      "prettier/prettier": "warn"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120
+  }
+}
