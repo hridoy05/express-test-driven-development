@@ -82,67 +82,43 @@ describe('User registration', () => {
     expect(Object.keys(body.validationErrors)).toEqual(['username', 'email'])
   })
   it.each`
-    field         | expectedMessage
-    ${'username'} | ${'username cannot be null'}
-    ${'email'}    | ${'email cannot be null'}
-    ${'password'} | ${'password cannot be null'}
-  `('returns $expectedMessage when $field is null', async ({ field, expectedMessage }) => {
+    field         |  value   |  expectedMessage
+    ${'username'} | ${null}  |${'username cannot be null'}
+    ${'username'} | ${'usr'}  |${'Must have min 4 and max 32 character'}
+    ${'username'} | ${'a'.repeat(33)}  |${'Must have min 4 and max 32 character'}
+    ${'email'}    | ${null}  |${'email cannot be null'}
+    ${'email'}    | ${'mail.com'}  |${'email is not valid'}
+    ${'email'}    | ${'user.mail.com'}  |${'email is not valid'}
+    ${'email'}    | ${'user@mail'}  |${'email is not valid'}
+    ${'password'} | ${null}  | ${'password cannot be null'}
+    ${'password'} | ${'P4sw'}  | ${'password must be at least 6 character'}
+    ${'password'} | ${'alllowecase'}  | ${'password must be at uppercase character,1 lowercase character and 1 number'}
+    ${'password'} | ${'ALLUPPERCASE'}  | ${'password must be at uppercase character,1 lowercase character and 1 number'}
+    ${'password'} | ${'1234567890'}    | ${'password must be at uppercase character,1 lowercase character and 1 number'}
+    ${'password'} | ${'lowerandUPPER'} | ${'password must be at uppercase character,1 lowercase character and 1 number'}
+    ${'password'} | ${'lower4nd5667'}  | ${'password must be at uppercase character,1 lowercase character and 1 number'}
+    ${'password'} | ${'UPPER44444'}    | ${'password must be at uppercase character,1 lowercase character and 1 number'}
+  `('returns $expectedMessage when $field is $value', async ({ field, expectedMessage,value }) => {
     const user = {
       username: 'user1',
       email: 'user1@mail.com',
       password: 'P4ssword',
     };
-    user[field] = null;
+    user[field] = value;
     const response = await postUser(user);
     const body = response.body;
     expect(body.validationErrors[field]).toBe(expectedMessage);
   });
 
-  // it.each([
-  //   ['username', 'username cannot be null'],
-  //   ['email', 'email cannot be null']
-  //   ['password', 'password cannot be null']
-  // ]
-  // )('when %s is null %s is received', async (field, expectedMessage)=> {
-  //     let user = {
-  //       username: 'user1',
-  //       email: 'user1@mail.com',
-  //       password: 'P4ssword',
-  //     }
-  //     user = {...user, [field]: null}
-    
-  //     const response = await postUser(user)
-  //     const body = response.body
-  //     console.log(response._data)
-  //     expect(body.validationErrors[field]).toBe(expectedMessage)
-  // })
-
-  // it('returns username cannot be null', async()=> {
-  //   const response = await postUser({
-  //     username: null,
+  // it('returns size validation error when username is less than 4 character',async ()=> {
+  //   const user = {
+  //     username: 'usr',
   //     email: 'user1@mail.com',
   //     password: 'P4ssword',
-  //   });
-  //   const body = response.body
-  //   expect(body.validationErrors.username).toBe("username cannot be null")
+  //   };
+  //   const response = await postUser(user);
+  //   const body = response.body;
+  //   expect(body.validationErrors.username).toBe('Must have min 4 and max 32 character');
   // })
 
-  // it('returns E-mail cannot be null', async()=> {
-  //   const response = await postUser({
-  //     username: 'user1',
-  //     email: null,
-  //     password: 'P4ssword',
-  //   });
-  //   const body = response.body
-  //   expect(body.validationErrors.email).toBe("email cannot be null")
-  // })
-  // it('returns Password cannot be null message when password is null', async()=> {
-  //   const response = await postUser({
-  //     username: 'user1',
-  //     email: 'user1@mail.com',
-  //     password: null,
-  //   });
-  //   const body = response.body
-  //   expect(body.validationErrors.password).toBe('password cannot be null')
-  // })
 });
